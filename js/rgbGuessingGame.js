@@ -8,38 +8,70 @@ function getRandomColor(){
 	return "rgb(" + getRandomNumber(0, 255) + ", " + getRandomNumber(0, 255) + ", " + getRandomNumber(0, 255) + ")";
 }
 
-// This function changes the colors of the squares to the picked color after a successful guess
-function changeSquareColors(){
-	// If it is on hard mode, the number of squares is 6, otherwise 3.
-	var numberOfSquares = isHardMode ? squares.length : 3;
+// This function starts the countdown timer
+function startCountdownTimer(){
+	var seconds = 180, timeRemaining = seconds;
 
-	for(var counter = 0; counter < numberOfSquares; counter++){
-		squares[counter].style.backgroundColor = rgbDisplay.textContent;
-	}
+	var timer = setInterval(function(){
+		if(timeRemaining > 0){
+			--timeRemaining;
+			countdownTimer.textContent = timeRemaining;
+		}
+		else{
+			// Stops the timer once it reaches zero
+			clearInterval(timer);
+
+			alert(score.textContent);
+
+			newGameBtn.click();
+		}
+	}, 1000);
 }
 
 // This function handles the squares' click event
 function squares_Click(e){
+	if(!hasTimerStarted){
+		startCountdownTimer();
+		hasTimerStarted = true;
+	}
+
 	// Checks if the clicked square's background color is the same as the chosen color
 	if(e.currentTarget.style.backgroundColor == rgbDisplay.textContent){
 		// Changes the header's background color to the chosen color
 		header.style.backgroundColor = rgbDisplay.textContent;
 		newGameBtn.textContent = "Play again?";
 		result.textContent = "Correct!";
-		changeSquareColors();
+		
+		// If it is on hard mode, the number of squares is 6, otherwise 3.
+		var numberOfSquares = isHardMode ? squares.length : 3;
+
+		// Changes the colors of the squares to the picked color after a successful guess
+		for (var counter = 0; counter < numberOfSquares; counter++) {
+			squares[counter].style.backgroundColor = rgbDisplay.textContent;
+		}
+
+		// For every correct guess, it adds 5 to the score if it's on hard mode, otherwise 3
+		score.textContent = Number(score.textContent) + (isHardMode ? 5 : 3);
 	}
 	else{
 		result.textContent = "Try again.";
 		// Hides the incorrect square
 		e.currentTarget.style.backgroundColor = "#232323";
+ 
+		if(Number(score.textContent) != 0){
+			// For every incorrect guess, it subtracts one from the score
+			score.textContent = Number(score.textContent) - 1;
+		}
 	}
 }
 
-// Flag that tells if the game is in hard mode
-var isHardMode = true;
+var isHardMode = true,
+	hasTimerStarted = false;
 
 var header = document.getElementById("header"),
 	rgbDisplay = document.getElementById("rgbDisplay"),
+	score = document.getElementById("score"),
+	countdownTimer = document.getElementById("countdownTimer"),
 	newGameBtn = document.getElementById("newGameBtn"),
 	easyModeBtn = document.getElementById("easyModeBtn"),
 	hardModeBtn = document.getElementById("hardModeBtn"),
@@ -47,8 +79,12 @@ var header = document.getElementById("header"),
 
 // Click event listener for newGameBtn
 newGameBtn.addEventListener("click", function(){
+	hasTimerStarted = false;
+	countdownTimer.textContent = 180;
+
 	header.style.backgroundColor = "#616A6B";
 	newGameBtn.textContent = "New Colors";
+	result.textContent = "";
 
 	var numberOfSquares = isHardMode ? squares.length : 3;
 
@@ -64,6 +100,9 @@ newGameBtn.addEventListener("click", function(){
 // Click event listener for easyModeBtn
 easyModeBtn.addEventListener("click", function(){
 	isHardMode = false;
+
+	hasTimerStarted = false;
+	countdownTimer.textContent = 180;
 
 	header.style.backgroundColor = "#616A6B";
 	newGameBtn.textContent = "New Colors";
@@ -89,6 +128,9 @@ easyModeBtn.addEventListener("click", function(){
 // Click event listener for hardModeBtn
 hardModeBtn.addEventListener("click", function(){
 	isHardMode = true;
+
+	hasTimerStarted = false;
+	countdownTimer.textContent = 180;
 
 	header.style.backgroundColor = "#616A6B";
 	newGameBtn.textContent = "New Colors";
