@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<link href="assets/css/index.css" rel="stylesheet" type="text/css" />
+		<link href="https://fonts.googleapis.com/css?family=Quicksand:300,700" rel="stylesheet" />
+
+		<script defer src="dist/app.js"></script>
+
+		<title>The Grand RGB Guessing Game</title>
+	</head>
+
+	<body>
+		<div id="header">
+			<h1>
+				The Grand <br />
+				<span id="rgbDisplay">RGB</span> <br />
+				Guessing Game
+			</h1>
+
+			<h3><span id="score">0</span> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp; <span id="countdownTimer">180</span> s</h3>
+		</div>
+
+		<div id="stripe">
+			<button id="newGameBtn">New Colors</button>
+
+			<span id="result"></span>
+
+			<button id="easyModeBtn">Easy</button>
+			<button class="selected" id="hardModeBtn">Hard</button>
+		</div>
+
+		<div id="container">
+			<div class="square"></div>
+			<div class="square"></div>
+			<div class="square"></div>
+			<div class="square"></div>
+			<div class="square"></div>
+			<div class="square"></div>
+
+			<p id="instructions">Try to choose the right color!</p>
+		</div>
+	</body>
+</html>
